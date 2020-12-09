@@ -1,8 +1,7 @@
-package com.example.monidome1;
+package com.example.monidome1.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -12,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.example.monidome1.Fragment.coffe_Fragment;
+import com.example.monidome1.Fragment.myFragment;
+import com.example.monidome1.Fragment.pijiuFragment;
+import com.example.monidome1.Fragment.yinliaoFragment;
+import com.example.monidome1.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-
 
     private Toolbar toolbar;
     private DrawerLayout mdrawerLayout;
@@ -34,44 +36,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private android.app.FragmentManager manager;
     private FragmentTransaction ft;
 
-
-
     private ImageView myImage;
-    /**
-     * 在Tab布局上显示联系人图标的控件
-     */
     private ImageView yinliaoImage;
-
-    /**
-     * 在Tab布局上显示动态图标的控件
-     */
     private ImageView pijiuImage;
-
-    /**
-     * 在Tab布局上显示设置图标的控件
-     */
     private ImageView coffeImage;
-
-    /**
-     * 在Tab布局上显示消息标题的控件
-     */
     private TextView coffeText;
-
-    /**
-     * 在Tab布局上显示联系人标题的控件
-     */
     private TextView yinliaoText;
-
-    /**
-     * 在Tab布局上显示动态标题的控件
-     */
     private TextView pijiuText;
-
-    /**
-     * 在Tab布局上显示设置标题的控件
-     */
     private TextView myText;
-
     private FragmentManager fragmentManager;
 
 
@@ -114,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         yinliaolayout.setOnClickListener(this);
         mylayout.setOnClickListener(this);
 
-
-
+    }
+    public void selected(){
+        
     }
 
     private void setTabSelection(int index) {

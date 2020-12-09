@@ -1,4 +1,4 @@
-package com.example.monidome1;
+package com.example.monidome1.Adaputer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.monidome1.BeanClass.Bean;
+import com.example.monidome1.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
     public void refrsh(List<Bean.DateBean> list){
-
+//        data.clear();
         this.data.addAll(list);
         notifyDataSetChanged();
     }

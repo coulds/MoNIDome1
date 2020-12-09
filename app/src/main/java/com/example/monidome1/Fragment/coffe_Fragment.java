@@ -1,4 +1,4 @@
-package com.example.monidome1;
+package com.example.monidome1.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,11 +6,20 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.example.monidome1.BeanClass.Bean;
+import com.example.monidome1.RetrofitUrl.Contant;
+import com.example.monidome1.Interface.IRetrofitService;
+import com.example.monidome1.Activity.MyAppcation;
+import com.example.monidome1.R;
+import com.example.monidome1.Adaputer.RecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +40,13 @@ public class coffe_Fragment extends Fragment {
     private Context context;
     private List list;
     private View coffe_Layout;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Boolean isRefresh = false;
 
-    private List<Bean.DateBean> arrayList=new ArrayList<>();
+    private List<Bean.DateBean> arrayList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private String ur="http://www.qubaobei.com/ios/cf/dish_list.php?stage_id=1&limit=20&page=1";
+    private String ur = "http://www.qubaobei.com/ios/cf/dish_list.php?stage_id=1&limit=20&page=1";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -81,10 +92,49 @@ public class coffe_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         coffe_Layout = inflater.inflate(R.layout.fragment_coffe_, container, false);
+        coffe_Layout = inflater.inflate(R.layout.fragment_coffe, container, false);
         context = this.context;
         initDate();
         initRecyclerView();
+        NetWork();
+
+
+        return coffe_Layout;
+    }
+
+    private void initRecyclerView() {
+
+        recyclerView = (RecyclerView) coffe_Layout.findViewById(R.id.recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this.getActivity());
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), arrayList);
+        recyclerView.setAdapter(recyclerViewAdapter);
+    }
+
+    private void initDate() {
+        swipeRefreshLayout = (SwipeRefreshLayout) coffe_Layout.findViewById(R.id.swipe_refreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                swipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        arrayList.clear();
+                        NetWork();
+                        recyclerViewAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+                },2000);
+            }
+        });
+
+
+    }
+    private void  NetWork(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Contant.Base_url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -101,25 +151,11 @@ public class coffe_Fragment extends Fragment {
 
             @Override
             public void onFailure(Call<Bean> call, Throwable t) {
-                Log.d("TAG","看看"+t);
+                Log.d("TAG", "看看" + t);
+                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
 
             }
         });
-
-        return coffe_Layout;
-    }
-
-    private void initRecyclerView() {
-
-        recyclerView=(RecyclerView)coffe_Layout.findViewById(R.id.recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this.getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(),arrayList);
-        recyclerView.setAdapter(recyclerViewAdapter);
-    }
-
-    private void initDate() {
 
     }
 }

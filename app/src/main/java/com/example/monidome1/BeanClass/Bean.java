@@ -1,4 +1,4 @@
-package com.example.monidome1;
+package com.example.monidome1.BeanClass;
 
 import java.util.List;
 

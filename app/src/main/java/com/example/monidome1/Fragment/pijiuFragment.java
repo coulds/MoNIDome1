@@ -1,4 +1,4 @@
-package com.example.monidome1;
+package com.example.monidome1.Fragment;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.monidome1.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link yinliaoFragment#newInstance} factory method to
+ * Use the {@link pijiuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class yinliaoFragment extends Fragment {
+public class pijiuFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class yinliaoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public yinliaoFragment() {
+    public pijiuFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class yinliaoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment yinliaoFragment.
+     * @return A new instance of fragment pijiuFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static yinliaoFragment newInstance(String param1, String param2) {
-        yinliaoFragment fragment = new yinliaoFragment();
+    public static pijiuFragment newInstance(String param1, String param2) {
+        pijiuFragment fragment = new pijiuFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,8 +61,7 @@ public class yinliaoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View yinliao_Layout = inflater.inflate(R.layout.fragment_yinliao, container, false);
-        return yinliao_Layout;
-
+        View pijiu_Layout = inflater.inflate(R.layout.fragment_pijiu, container, false);
+        return pijiu_Layout;
     }
 }
