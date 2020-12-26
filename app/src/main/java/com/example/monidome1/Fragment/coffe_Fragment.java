@@ -147,6 +147,8 @@ public class coffe_Fragment extends Fragment {
                 Bean bean = response.body();
                 arrayList.addAll(bean.getData());
                 recyclerViewAdapter.refrsh(arrayList);
+//                bean.setData(arrayList.get());
+                bean.save();
             }
 
             @Override

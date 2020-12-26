@@ -1,8 +1,10 @@
 package com.example.monidome1.BeanClass;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
-public class Bean {
+public class Bean extends DataSupport{
 
 
     private int code;
@@ -25,6 +27,9 @@ public class Bean {
     }
 
     public static class DateBean{
+
+
+
         private String id;
         private String title;
         private String pic;

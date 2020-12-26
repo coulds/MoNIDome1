@@ -105,19 +105,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 1:
-                if (pijiufragment == null){
-                    pijiufragment = new pijiuFragment();
-                    transaction.add(R.id.content,pijiufragment);
-                }else {
-                    transaction.show(pijiufragment);
-                }
-                break;
-            case 2:
                 if (yinliaofragment == null){
                     yinliaofragment = new yinliaoFragment();
                     transaction.add(R.id.content,yinliaofragment);
                 }else {
                     transaction.show(yinliaofragment);
+                }
+                break;
+
+            case 2:
+                if (pijiufragment == null){
+                    pijiufragment = new pijiuFragment();
+                    transaction.add(R.id.content,pijiufragment);
+                }else {
+                    transaction.show(pijiufragment);
                 }
                 break;
             case 3:

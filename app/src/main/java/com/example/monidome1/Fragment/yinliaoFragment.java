@@ -3,12 +3,29 @@ package com.example.monidome1.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.monidome1.Activity.MyAppcation;
+import com.example.monidome1.Adaputer.YinliaoAdapter;
+import com.example.monidome1.BeanClass.YinliaoBean;
+import com.example.monidome1.Interface.YinliaoService;
 import com.example.monidome1.R;
+import com.example.monidome1.RetrofitUrl.YinliaoUrl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +33,12 @@ import com.example.monidome1.R;
  * create an instance of this fragment.
  */
 public class yinliaoFragment extends Fragment {
+    private RecyclerView yinliaorecyclerview;
+    private YinliaoAdapter yinliaoAdapter;
+    private View yinliao_Layout;
+    private List<YinliaoBean.ResultBean> yinliaoList = new ArrayList<>();
+    private String url="https://api.apiopen.top/getWangYiNews?page=1&count=5";
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,8 +84,53 @@ public class yinliaoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View yinliao_Layout = inflater.inflate(R.layout.fragment_yinliao, container, false);
+         yinliao_Layout = inflater.inflate(R.layout.fragment_yinliao, container, false);
+        NetAPI();
+        InitRecyclerView();
+
+
         return yinliao_Layout;
+
+    }
+
+    private void InitRecyclerView() {
+        yinliaorecyclerview = (RecyclerView) yinliao_Layout.findViewById(R.id.yinliao_Recyclerview);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        yinliaorecyclerview.setLayoutManager(linearLayoutManager);
+        yinliaoAdapter = new YinliaoAdapter(getActivity(),yinliaoList);
+        yinliaorecyclerview.setAdapter(yinliaoAdapter);
+
+
+
+    }
+
+    private void NetAPI() {
+        Retrofit retrofit1= new Retrofit.Builder().
+                baseUrl(YinliaoUrl.yingliao_url).
+                addConverterFactory(GsonConverterFactory.create()).
+                build();
+        YinliaoService yinliaoService = retrofit1.create(YinliaoService.class);
+        Call<YinliaoBean> call = yinliaoService.getURL(url);
+        call.enqueue(new Callback<YinliaoBean>() {
+            @Override
+            public void onResponse(Call<YinliaoBean> call, Response<YinliaoBean> response) {
+                YinliaoBean yinliaoBean = response.body();
+                yinliaoList.addAll(yinliaoBean.getResult());
+                yinliaoAdapter.yinliaorefrsh(yinliaoList);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<YinliaoBean> call, Throwable t) {
+
+                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
 
     }
 }
