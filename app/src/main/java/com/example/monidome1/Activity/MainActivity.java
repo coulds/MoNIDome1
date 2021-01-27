@@ -5,6 +5,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,16 +54,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
+        initview();
         fragmentManager  = getSupportFragmentManager();
         setTabSelection(0);
         getSupportFragmentManager();
-        DrawerLayout mdrawerLayout = (DrawerLayout) findViewById(R.id.dl_drawerlayout);
-        initview();
+
+
+
+
 
     }
     private void initview() {
-
+        DrawerLayout mdrawerLayout = (DrawerLayout) findViewById(R.id.dl_drawerlayout);
         navigationView =findViewById(R.id.nav_view);
 
         coffelayout = findViewById(R.id.coffe_layout);
@@ -86,16 +90,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         yinliaolayout.setOnClickListener(this);
         mylayout.setOnClickListener(this);
 
+
     }
     public void selected(){
-        
+        myImage.setSelected(false);
+        pijiuImage.setSelected(false);
+        yinliaoImage.setSelected(false);
+        coffeImage.setSelected(false);
+
+        coffeText.setSelected(false);
+        pijiuText.setSelected(false);
+        yinliaoText.setSelected(false);
+        myText.setSelected(false);
     }
 
+
+
+
+    @SuppressLint("ResourceType")
     private void setTabSelection(int index) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         hideFragment(transaction);
         switch (index){
             case 0:
+               selected();
+               coffeImage.setSelected(true);
+               coffeText.setSelected(true);
                 if (coffefragment == null){
                     coffefragment = new coffe_Fragment();
                     transaction.add(R.id.content,coffefragment);
@@ -105,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 1:
+               selected();
+               yinliaoImage.setSelected(true);
+               yinliaoText.setSelected(true);
                 if (yinliaofragment == null){
                     yinliaofragment = new yinliaoFragment();
                     transaction.add(R.id.content,yinliaofragment);
@@ -114,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case 2:
+                selected();
+                pijiuText.setSelected(true);
+                pijiuImage.setSelected(true);
                 if (pijiufragment == null){
                     pijiufragment = new pijiuFragment();
                     transaction.add(R.id.content,pijiufragment);
@@ -122,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 3:
+                selected();
+                myImage.setSelected(true);
+                myText.setSelected(true);
                 if (myfragment == null){
                     myfragment = new myFragment();
                     transaction.add(R.id.content,myfragment);
@@ -153,6 +182,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        hideFragment(transaction);
+
         switch (view.getId()) {
             case R.id.coffe_layout:
                 // 当点击了消息tab时，选中第1个tab

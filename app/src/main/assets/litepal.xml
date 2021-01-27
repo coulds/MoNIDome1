@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <!-- 数据库名字 -->
+    <dbname value="demo" />
+    <!-- 数据库版本 -->
+    <version value="1" />
+    <!--  数据库对象  -->
+    <list>
+        <mapping class="com.example.monidome1.BeanClass.TestBeanLitepal"></mapping>
+        <mapping class="com.example.monidome1.BeanClass.Bean"></mapping>
+
+    </list>
+
+</litepal>

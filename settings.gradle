@@ -1,2 +1,5 @@
+include ':widget'
+include ':base'
+include ':umeng'
 include ':app'
 rootProject.name = "MoNIDome1"

@@ -3,12 +3,31 @@ package com.example.monidome1.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
+import android.widget.Toast;
 
+import com.example.monidome1.Activity.MyAppcation;
+import com.example.monidome1.Adaputer.PictureAdapter;
+import com.example.monidome1.BeanClass.PictureBean;
+import com.example.monidome1.Interface.PictureService;
 import com.example.monidome1.R;
+import com.example.monidome1.RetrofitUrl.PictureUrl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +35,11 @@ import com.example.monidome1.R;
  * create an instance of this fragment.
  */
 public class pijiuFragment extends Fragment {
+    private PictureAdapter pictureAdapter;
+    private View pijiu_Layout;
+    private RecyclerView picrecycleview;
+    private List<PictureBean.DataBean> picturelist = new ArrayList<>();
+    private String url ="http://wallpaper.apc.360.cn/index.php?c=WallPaperAndroid&a=getAppsByCategory&cid=1&start=0&count=99";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,7 +85,47 @@ public class pijiuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View pijiu_Layout = inflater.inflate(R.layout.fragment_pijiu, container, false);
+        pijiu_Layout = inflater.inflate(R.layout.fragment_pijiu, container, false);
+        NetAPI();
+        InitRecycleview();
         return pijiu_Layout;
+    }
+
+    private void InitRecycleview() {
+        picrecycleview = (RecyclerView) pijiu_Layout.findViewById(R.id.pictureRecycleview);
+
+        GridLayoutManager manager = new GridLayoutManager(getActivity(),2);
+        manager.setOrientation(GridLayoutManager.VERTICAL);
+        picrecycleview.setLayoutManager(manager);
+        pictureAdapter = new PictureAdapter(getActivity(),picturelist);
+        picrecycleview.setAdapter(pictureAdapter);
+
+//        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+//        manager.setOrientation(LinearLayoutManager.VERTICAL);
+
+
+    }
+
+    private void NetAPI() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PictureUrl.Picture_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        PictureService pictureService = retrofit.create(PictureService.class);
+        Call<PictureBean> call = pictureService.getURL(url);
+        call.enqueue(new Callback<PictureBean>() {
+            @Override
+            public void onResponse(Call<PictureBean> call, Response<PictureBean> response) {
+                PictureBean pictureBean = response.body();
+                picturelist.addAll(pictureBean.getData());
+                pictureAdapter.refrest(picturelist);
+            }
+
+            @Override
+            public void onFailure(Call<PictureBean> call, Throwable t) {
+                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 }

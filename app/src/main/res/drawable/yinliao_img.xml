@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/yingliao_color" android:state_selected="true" />
+    //当菜单栏没有被选中时，提供的图片。
+    <item android:drawable="@drawable/yingliao" />
+</selector>
