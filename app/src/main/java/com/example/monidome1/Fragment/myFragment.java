@@ -1,5 +1,6 @@
 package com.example.monidome1.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,7 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.monidome1.Activity.LoginActivity;
 import com.example.monidome1.R;
 
 /**
@@ -23,6 +26,7 @@ public class myFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private View my_Layout;
     private String mParam1;
     private String mParam2;
 
@@ -62,7 +66,19 @@ public class myFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View my_Layout = inflater.inflate(R.layout.fragment_my, container, false);
+         my_Layout = inflater.inflate(R.layout.fragment_my, container, false);
+        initview();
         return my_Layout;
+    }
+
+    private void initview() {
+        TextView login_text = (TextView)my_Layout.findViewById(R.id.me_name);
+        login_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:background="@android:color/background_light">
+            android:background="@drawable/bottom_nav">
 
 
             <RelativeLayout
@@ -40,7 +40,7 @@
                         android:layout_width="76dp"
                         android:layout_height="32dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/coffee" />
+                        android:src="@drawable/coffee_img" />
 
                     <TextView
                         android:id="@+id/coffe_text"
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="咖啡"
-                        android:textColor="#82858b" />
+                        android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -69,7 +69,7 @@
                         android:layout_width="75dp"
                         android:layout_height="32dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/yingliao" />
+                        android:src="@drawable/yinliao_img" />
 
                     <TextView
                         android:id="@+id/yinliao_text"
@@ -77,7 +77,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="饮料"
-                        android:textColor="#82858b" />
+                        android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -98,7 +98,7 @@
                         android:layout_width="79dp"
                         android:layout_height="33dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/pijiu" />
+                        android:src="@drawable/pijiu_img" />
 
                     <TextView
                         android:id="@+id/pijiu_text"
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="啤酒"
-                        android:textColor="#82858b" />
+                        android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -120,6 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:clickable="false"
                     android:orientation="vertical">
 
                     <ImageView
@@ -127,7 +128,7 @@
                         android:layout_width="83dp"
                         android:layout_height="31dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/my" />
+                        android:src="@drawable/my_img" />
 
                     <TextView
                         android:id="@+id/my_text"
@@ -135,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="我的"
-                        android:textColor="#82858b" />
+                        android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

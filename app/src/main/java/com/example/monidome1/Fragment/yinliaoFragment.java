@@ -1,5 +1,6 @@
 package com.example.monidome1.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.monidome1.Activity.MyAppcation;
 import com.example.monidome1.Adaputer.YinliaoAdapter;
+import com.example.monidome1.BeanClass.HomeBean;
 import com.example.monidome1.BeanClass.YinliaoBean;
+import com.example.monidome1.Interface.TabService;
 import com.example.monidome1.Interface.YinliaoService;
 import com.example.monidome1.R;
 import com.example.monidome1.RetrofitUrl.YinliaoUrl;
@@ -36,8 +39,17 @@ public class yinliaoFragment extends Fragment {
     private RecyclerView yinliaorecyclerview;
     private YinliaoAdapter yinliaoAdapter;
     private View yinliao_Layout;
-    private List<YinliaoBean.ResultBean> yinliaoList = new ArrayList<>();
-    private String url="https://api.apiopen.top/getWangYiNews?page=1&count=5";
+//    private List<YinliaoBean.ResultBean> yinliaoList = new ArrayList<>();
+    private List<HomeBean.DataBean.DatasBean> homelist = new ArrayList<>();
+//    private String url="https://api.apiopen.top/getWangYiNews?page=1&count=5";
+    private String url="https://www.wanandroid.com/article/list/0/json";
+
+    
+    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private final String[] mTitles = {
+            "热门", "iOS", "Android"
+            , "前端", "后端", "设计", "工具资源"
+    };
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -98,7 +110,7 @@ public class yinliaoFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         yinliaorecyclerview.setLayoutManager(linearLayoutManager);
-        yinliaoAdapter = new YinliaoAdapter(getActivity(),yinliaoList);
+        yinliaoAdapter = new YinliaoAdapter(getActivity(),homelist);
         yinliaorecyclerview.setAdapter(yinliaoAdapter);
 
 
@@ -110,25 +122,23 @@ public class yinliaoFragment extends Fragment {
                 baseUrl(YinliaoUrl.yingliao_url).
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
-        YinliaoService yinliaoService = retrofit1.create(YinliaoService.class);
-        Call<YinliaoBean> call = yinliaoService.getURL(url);
-        call.enqueue(new Callback<YinliaoBean>() {
+        TabService tabService = retrofit1.create(TabService.class);
+        Call<HomeBean> call = tabService.getUrl(url);
+        call.enqueue(new Callback<HomeBean>() {
             @Override
-            public void onResponse(Call<YinliaoBean> call, Response<YinliaoBean> response) {
-                YinliaoBean yinliaoBean = response.body();
-                yinliaoList.addAll(yinliaoBean.getResult());
-                yinliaoAdapter.yinliaorefrsh(yinliaoList);
-
-
+            public void onResponse(Call<HomeBean> call, Response<HomeBean> response) {
+                HomeBean homeBean = response.body();
+                homelist.addAll(homeBean.getData().getDatas());
+                yinliaoAdapter.yinliaorefrsh(homelist);
             }
 
             @Override
-            public void onFailure(Call<YinliaoBean> call, Throwable t) {
-
-                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<HomeBean> call, Throwable t) {
 
             }
         });
+
+
 
 
 

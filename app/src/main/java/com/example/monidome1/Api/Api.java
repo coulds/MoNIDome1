@@ -33,6 +33,7 @@ public class Api {
                 .Builder()
                 .build();
         requesturl = ApiUrl.BASE_URL+url;
+
         mpamars = pamars;
         return api;
 
@@ -51,7 +52,7 @@ public class Api {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-               Log.e("onfailure",e.getMessage());
+
                callBack.onFailure(e);
 
             }

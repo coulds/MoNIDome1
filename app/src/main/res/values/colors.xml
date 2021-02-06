@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ed1573</color>
     <color name="color_red">#ff0000</color>
@@ -10,7 +10,8 @@
     <color name="color_black">#000000</color>
     <color name="color_huise">#82858b</color>
     <color name="white">#ffffff</color>
-
+    <color name="always_white_text">#FFFFFF</color>
+    <color name="card_grey_bg">#70616161</color>
     <color name="activity_bg_color">#fafafa</color>
     <color name="title_bg_color">#EC3624</color>
     <color name="border_clo">#ccc</color>
@@ -22,10 +23,10 @@
     <color name="textcolor_nomal">#000000</color>
     <color name="textcolor_red">#ff0000</color>
     <color name="text_7777_color">#777777</color>
-
+    <color name="me_item">#FFFFFF</color>
     <color name="bg_app">#F1F1F1</color>
     <color name="color_vote">#fcb900</color>
-
+    <color name="background">#d8d8d8</color>
     <color name="school_true">#d0d4eb</color>
     <color name="dark">#FF222222</color>
     <color name="tab_unselect">#c9c9c9</color>

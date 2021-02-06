@@ -1,5 +1,6 @@
 package com.example.monidome1.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.monidome1.Api.Api;
 import com.example.monidome1.Api.ApiUrl;
 import com.example.monidome1.Api.TtitCallBack;
+import com.example.monidome1.Entity.RegisterEntity;
 import com.example.monidome1.R;
 import com.example.monidome1.util.StringUtil;
 
@@ -53,6 +55,9 @@ public class RegisterActivity extends BaseActivity {
                 String registe_username = register_editText_phone.getText().toString();
                 String register_password = register_editText_password.getText().toString();
                 String register_compassword = register_commite_password.getText().toString();
+
+
+
                 registe(registe_username,register_password,register_compassword);
             }
         });
@@ -61,14 +66,15 @@ public class RegisterActivity extends BaseActivity {
     private void registe(String username,String password,String repassword){
 
         if (StringUtil.isEmpty(username)){
-            showToast(username);
+            showToast("请完善信息");
             return;
         }
         if (StringUtil.isEmpty(password)){
-            showToast(password);
+            showToast("请完善信息");
+
             return;
         }if (StringUtil.isEmpty(repassword)){
-            showToast(password);
+            showToast("请完善信息");
             return;
         }
 
@@ -76,16 +82,13 @@ public class RegisterActivity extends BaseActivity {
         parms.put("username",username);
         parms.put("password",password);
         parms.put("repassword",repassword);
+
         Api.config(ApiUrl.Resigte,parms).postrequest(new TtitCallBack() {
             @Override
             public void onSuccess(final String resulte) {
-                Log.e("嘿嘿", "onSuccess: "+"请求成功" );
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast(resulte);
-                    }
-                });
+                Log.e("注册嘿嘿", "onSuccess: "+"请求成功" );
+                showToast("注册成功");
+                finish();
             }
 
             @Override
@@ -95,6 +98,21 @@ public class RegisterActivity extends BaseActivity {
         });
 
     }
+
+//    public void onRegister(RegisterEntity registerData) {
+//        if (registerData != null) {
+//            if (registerData.getErrorCode() == 0) {
+//                showToast("注册成功");
+//                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//                intent.putExtra("referrer", mUsername.getText().toString());
+//                intent.putExtra("collect", mPassword.getText().toString());
+//                startActivity(intent);
+//                finish();
+//            } else {
+//                ToastUtils.showShort(registerData.getErrorMsg());
+//            }
+//        }
+//    }
 
 
 

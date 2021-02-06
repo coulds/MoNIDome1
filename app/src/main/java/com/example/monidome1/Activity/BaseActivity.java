@@ -26,7 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private boolean isAllowScreenRoate = true;
     //封装Toast对象
     private static Toast toast;
-    public Context context;
+    public Context mcontext;
 
 
 
@@ -34,8 +34,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mcontext = this;
         ActivityControler.addActivity(this);
-        context = this;
+
         if (!isShowTitle){
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
@@ -147,25 +148,30 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @SuppressLint("ShowToast")
     public void showToast(String msg) {
-        try {
-            if (null == toast) {
-                toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-            } else {
-                toast.setText(msg);
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    toast.show();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
             //解决在子线程中调用Toast的异常情况处理
             Looper.prepare();
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mcontext, msg, Toast.LENGTH_SHORT).show();
             Looper.loop();
-        }
+
+//        try {
+//            if (null == toast) {
+//                toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+//            } else {
+//                toast.setText(msg);
+//            }
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    toast.show();
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            //解决在子线程中调用Toast的异常情况处理
+//            Looper.prepare();
+//            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+//            Looper.loop();
+//        }
     }
 
     /**
@@ -193,7 +199,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void navigateTo(Class cla){
-        Intent intent = new Intent(context,cla);
+        Intent intent = new Intent(mcontext,cla);
         startActivity(intent);
     }
 }

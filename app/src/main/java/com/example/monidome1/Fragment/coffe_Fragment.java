@@ -1,25 +1,49 @@
 package com.example.monidome1.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Network;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.monidome1.BeanClass.Bean;
+import com.bumptech.glide.util.Util;
+import com.example.monidome1.Banner.LocalImageLoader;
+import com.example.monidome1.BeanClass.BannerBean;
+import com.example.monidome1.BeanClass.HomeBean;
+import com.example.monidome1.Interface.BannerService;
+import com.example.monidome1.Interface.TabService;
+import com.example.monidome1.RetrofitUrl.BannerUrl;
 import com.example.monidome1.RetrofitUrl.Contant;
-import com.example.monidome1.Interface.IRetrofitService;
+
 import com.example.monidome1.Activity.MyAppcation;
 import com.example.monidome1.R;
 import com.example.monidome1.Adaputer.RecyclerViewAdapter;
+import com.example.monidome1.util.StringUtil;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,23 +54,36 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.view.View.GONE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link coffe_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class coffe_Fragment extends Fragment {
-
+public class coffe_Fragment extends Fragment  {
     private Context context;
-    private List list;
     private View coffe_Layout;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Boolean isRefresh = false;
 
-    private List<Bean.DateBean> arrayList = new ArrayList<>();
+    private Banner banner;
+    private LocalImageLoader mImageLoader;
+
+    private int loadMoreNum;
+    private NestedScrollView mNestedScrollView;
+    private Toolbar mToolbar;
+
+    private ArrayList<String> images=new ArrayList<>();
+    private ArrayList<String> title=new ArrayList<>();
+//    private List<Bean.DataBean> arrayList = new ArrayList<>();
+    private List<HomeBean.DataBean.DatasBean> arrayList = new ArrayList<>();
+    private List<BannerBean.DataBean> BannerList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private String ur = "http://www.qubaobei.com/ios/cf/dish_list.php?stage_id=1&limit=20&page=1";
+//    private String ur = "https://www.wanandroid.com/article/top/json";
+    private String ur = "https://www.wanandroid.com/article/list/0/json";
+    private String url = "https://www.wanandroid.com/banner/json";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,13 +130,56 @@ public class coffe_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         coffe_Layout = inflater.inflate(R.layout.fragment_coffe, container, false);
-        context = this.context;
+        context = getContext().getApplicationContext();
+
         initDate();
         initRecyclerView();
         NetWork();
-
-
+        BannerNetWork();
+        initDateBanner();
+        initToolbar();
         return coffe_Layout;
+    }
+
+
+
+
+    private void initToolbar() {
+        mNestedScrollView = coffe_Layout.findViewById(R.id.nest_scroll);
+        mToolbar = coffe_Layout.findViewById(R.id.home_toolbar);
+        int showOrHideToolbarHeight = StringUtil.dpToPx(context, 200)
+                - StringUtil.getStatusBarHeight(context)
+                - StringUtil.getActionBarHeight(context);
+        mNestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollY > oldScrollY && scrollY - showOrHideToolbarHeight >= 0) {
+                // 向上滑
+                ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+                mToolbar.setPadding(0, StringUtil.getStatusBarHeight(context), 0, 0);
+                mToolbar.setTitle("首页");
+                mToolbar.setVisibility(View.VISIBLE);
+            } else if (scrollY < oldScrollY && scrollY - showOrHideToolbarHeight <= 0) {
+                // 向下滑
+                ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+                mToolbar.setVisibility(GONE);
+            }
+        });
+    }
+
+    private void initDateBanner() {
+        banner = coffe_Layout.findViewById(R.id.home_banner);
+        mImageLoader = new LocalImageLoader();
+
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        banner.setImageLoader(mImageLoader);
+        banner.setBannerAnimation(Transformer.Default);
+        banner.setDelayTime(3000);
+        banner.isAutoPlay(true);
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Toast.makeText(getContext(),"你点击了"+position+"行",Toast.LENGTH_SHORT);
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -109,28 +189,56 @@ public class coffe_Fragment extends Fragment {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), arrayList);
+//        mPullLoadMoreRecyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+
+
+
+
     }
 
+    //        recyclerView.addOnScrollListener(new LoadMoreScrollListener(manager) {
+//            @Override
+//            public void onLoadMore() {
+//                recyclerView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        arrayList.clear();
+//                        NetWork();
+//                        recyclerViewAdapter.notifyDataSetChanged();
+//                        swipeRefreshLayout.setRefreshing(false);
+//                    }
+//                },1000);
+//            }
+//        });
     private void initDate() {
-        swipeRefreshLayout = (SwipeRefreshLayout) coffe_Layout.findViewById(R.id.swipe_refreshLayout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+
+
+        RefreshLayout refreshLayout = (RefreshLayout)coffe_Layout.findViewById(R.id.refreshLayout);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(final RefreshLayout refreshlayout1) {
 
-                swipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        arrayList.clear();
-                        NetWork();
-                        recyclerViewAdapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
-
-                    }
-                },2000);
+                NetWork();
+                recyclerViewAdapter.refrsh(arrayList);
+                refreshlayout1.finishRefresh(30000/*,false*/);//传入false表示刷新失败
+                refreshlayout1.finishRefresh(true);
             }
         });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout1) {
+                recyclerViewAdapter.refrshmore(arrayList,1);
+                refreshlayout1.finishLoadMore(30000/*,false*/);//传入false表示刷新失败
+                refreshlayout1.finishLoadMore(true);
+            }
+        });
+
+
 
 
     }
@@ -139,25 +247,61 @@ public class coffe_Fragment extends Fragment {
                 .baseUrl(Contant.Base_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        IRetrofitService iRetrofitService = retrofit.create(IRetrofitService.class);
-        Call<Bean> call = iRetrofitService.getUrl(ur);
-        call.enqueue(new Callback<Bean>() {
+        TabService tabService = retrofit.create(TabService.class);
+        Call<HomeBean> call = tabService.getUrl(ur);
+        call.enqueue(new Callback<HomeBean>() {
             @Override
-            public void onResponse(Call<Bean> call, Response<Bean> response) {
-                Bean bean = response.body();
-                arrayList.addAll(bean.getData());
+            public void onResponse(Call<HomeBean> call, Response<HomeBean> response) {
+                HomeBean homebean = response.body();
+                arrayList.addAll(homebean.getData().getDatas());
                 recyclerViewAdapter.refrsh(arrayList);
-//                bean.setData(arrayList.get());
-                bean.save();
+
             }
 
             @Override
-            public void onFailure(Call<Bean> call, Throwable t) {
-                Log.d("TAG", "看看" + t);
-                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<HomeBean> call, Throwable t) {
 
+                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
             }
         });
 
     }
+
+    private void BannerNetWork() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BannerUrl.Base_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        BannerService bannerService = retrofit.create(BannerService.class);
+        Call<BannerBean> call = bannerService.getUrl(url);
+        call.enqueue(new Callback<BannerBean>() {
+            @Override
+            public void onResponse(Call<BannerBean> call, Response<BannerBean> response) {
+                Log.e("哈哈哈","请求成功："+response);
+
+                BannerBean bannerBean = response.body();
+                BannerList.addAll(bannerBean.getData());
+                Log.e("++++++++","这是bean集合里的数据："+BannerList);
+                for (int i = 0; i < BannerList.size(); i++) {
+                    images.add(BannerList.get(i).getImagePath());
+                    title.add(BannerList.get(i).getTitle());
+                }
+                banner.setImages(images);
+                banner.setBannerTitles(title);
+                banner.start();
+
+            }
+
+            @Override
+            public void onFailure(Call<BannerBean> call, Throwable t) {
+                Log.e("哈哈哈","请求失败："+t);
+
+            }
+        });
+
+
+
+    }
+
+
 }
