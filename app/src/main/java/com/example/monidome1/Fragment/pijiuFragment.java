@@ -4,18 +4,16 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.example.monidome1.Activity.MyAppcation;
 import com.example.monidome1.Adaputer.PictureAdapter;
-import com.example.monidome1.BeanClass.PictureBean;
+import com.example.monidome1.Bean.PictureBean;
 import com.example.monidome1.Interface.PictureService;
 import com.example.monidome1.R;
 import com.example.monidome1.RetrofitUrl.PictureUrl;

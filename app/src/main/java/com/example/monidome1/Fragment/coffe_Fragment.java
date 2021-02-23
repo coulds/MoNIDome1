@@ -1,11 +1,8 @@
 package com.example.monidome1.Fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Network;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -14,20 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.example.monidome1.Banner.LocalImageLoader;
-import com.example.monidome1.BeanClass.BannerBean;
-import com.example.monidome1.BeanClass.HomeBean;
+import com.example.monidome1.Bean.BannerBean;
+import com.example.monidome1.Bean.HomeBean;
 import com.example.monidome1.Interface.BannerService;
 import com.example.monidome1.Interface.TabService;
-import com.example.monidome1.RetrofitUrl.BannerUrl;
+import com.example.monidome1.RetrofitUrl.WanAdroidUrl;
 import com.example.monidome1.RetrofitUrl.Contant;
 
 import com.example.monidome1.Activity.MyAppcation;
@@ -132,6 +128,7 @@ public class coffe_Fragment extends Fragment  {
         coffe_Layout = inflater.inflate(R.layout.fragment_coffe, container, false);
         context = getContext().getApplicationContext();
 
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initDate();
         initRecyclerView();
         NetWork();
@@ -223,10 +220,11 @@ public class coffe_Fragment extends Fragment  {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout1) {
 
+                arrayList.clear();
                 NetWork();
-                recyclerViewAdapter.refrsh(arrayList);
-                refreshlayout1.finishRefresh(30000/*,false*/);//传入false表示刷新失败
+                refreshlayout1.finishRefresh(3000/*,false*/);//传入false表示刷新失败
                 refreshlayout1.finishRefresh(true);
+
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -269,7 +267,7 @@ public class coffe_Fragment extends Fragment  {
 
     private void BannerNetWork() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BannerUrl.Base_url)
+                .baseUrl(WanAdroidUrl.Base_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         BannerService bannerService = retrofit.create(BannerService.class);

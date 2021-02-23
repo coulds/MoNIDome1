@@ -1,6 +1,5 @@
-package com.example.monidome1.BeanClass;
+package com.example.monidome1.Bean;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class PictureBean {

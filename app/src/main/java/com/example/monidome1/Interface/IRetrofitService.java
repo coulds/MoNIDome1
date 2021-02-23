@@ -1,6 +1,6 @@
 package com.example.monidome1.Interface;
 
-import com.example.monidome1.BeanClass.Bean;
+import com.example.monidome1.Bean.Bean;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

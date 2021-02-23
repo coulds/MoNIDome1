@@ -10,10 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.monidome1.BeanClass.Bean;
-import com.example.monidome1.BeanClass.HomeBean;
-import com.example.monidome1.BeanClass.YinliaoBean;
+import com.example.monidome1.Bean.HomeBean;
 import com.example.monidome1.R;
 
 import java.util.ArrayList;

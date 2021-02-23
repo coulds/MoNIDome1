@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/coffee_color" android:state_selected="true" />
-    <item android:drawable="@drawable/coffee" />
+<!--    <item android:drawable="@drawable/coffee_color" android:state_selected="true" />-->
+<!--    <item android:drawable="@drawable/coffee" />-->
+
+    <!-- 按压状态 -->
+    <item android:drawable="@drawable/home_home_on_ic" android:state_selected="true" />
+
+    <!-- 默认状态 -->
+    <item android:drawable="@drawable/home_home_off_ic" />
+
 
 </selector>

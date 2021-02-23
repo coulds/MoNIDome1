@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/my_color" android:state_selected="true" />
-    //当菜单栏没有被选中时，提供的图片。
-    <item android:drawable="@drawable/my" />
+<!--    <item android:drawable="@drawable/my_color" android:state_selected="true" />-->
+<!--    //当菜单栏没有被选中时，提供的图片。-->
+<!--    <item android:drawable="@drawable/my" />-->
+
+
+    <!-- 按压状态 -->
+    <item android:drawable="@drawable/home_me_on_ic" android:state_selected="true" />
+
+    <!-- 默认状态 -->
+    <item android:drawable="@drawable/home_me_off_ic" />
 </selector>

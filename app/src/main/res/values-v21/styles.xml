@@ -4,10 +4,18 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
 
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <!-- 设置statusBarColor 为透明-->
-        <item name="android:statusBarColor">@android:color/transparent</item>
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        &lt;!&ndash; 设置statusBarColor 为透明&ndash;&gt;-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+
+
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+
+
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

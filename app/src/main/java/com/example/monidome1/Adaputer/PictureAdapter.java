@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.monidome1.BeanClass.PictureBean;
+import com.example.monidome1.Bean.PictureBean;
 import com.example.monidome1.R;
 
 import java.util.ArrayList;

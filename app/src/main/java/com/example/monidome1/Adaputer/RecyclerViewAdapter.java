@@ -11,10 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.monidome1.BeanClass.Bean;
-import com.example.monidome1.BeanClass.HomeBean;
+import com.example.monidome1.Bean.HomeBean;
 import com.example.monidome1.R;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,8 +108,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     public void refrshmore(List<HomeBean.DataBean.DatasBean> list,int page){
 //        data.clear();
-        this.data.addAll(1,list);
-        notifyDataSetChanged();
+        int i=0;
+        for (i=0;i<=list.size();i++){
+            this.data.addAll(i,list);
+            notifyDataSetChanged();
+        }
+
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {

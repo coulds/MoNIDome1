@@ -18,9 +18,9 @@
         android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/bottom_nav">
+            android:background="@drawable/bottom_navigationview_top">
 
 
             <RelativeLayout
@@ -37,8 +37,8 @@
 
                     <ImageView
                         android:id="@+id/coffe_image"
-                        android:layout_width="76dp"
-                        android:layout_height="32dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/coffee_img" />
 
@@ -47,7 +47,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="咖啡"
+                        android:text="首页"
+
                         android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
@@ -66,8 +67,8 @@
 
                     <ImageView
                         android:id="@+id/yinliao_image"
-                        android:layout_width="75dp"
-                        android:layout_height="32dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/yinliao_img" />
 
@@ -76,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="饮料"
+                        android:text="发现"
                         android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
@@ -95,8 +96,8 @@
 
                     <ImageView
                         android:id="@+id/pijiu_image"
-                        android:layout_width="79dp"
-                        android:layout_height="33dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/pijiu_img" />
 
@@ -105,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="啤酒"
+                        android:text="消息"
                         android:textColor="@drawable/coffee_text" />
                 </LinearLayout>
             </RelativeLayout>
@@ -125,8 +126,8 @@
 
                     <ImageView
                         android:id="@+id/my_image"
-                        android:layout_width="83dp"
-                        android:layout_height="31dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/my_img" />
 
