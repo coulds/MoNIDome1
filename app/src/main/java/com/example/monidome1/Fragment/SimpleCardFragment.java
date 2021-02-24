@@ -2,6 +2,7 @@ package com.example.monidome1.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,10 @@ import com.example.monidome1.Bean.ProjectDecBean;
 import com.example.monidome1.Interface.ProjectDecService;
 import com.example.monidome1.R;
 import com.example.monidome1.RetrofitUrl.WanAdroidUrl;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +40,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * create an instance of this fragment.
  */
 public class SimpleCardFragment extends Fragment {
+
+    private String project_baseurl="/json?cid=294";
+    private ProjectListAdapter projectListAdapter;
+    private View view;
+    private RefreshLayout refreshLayouts;
     private RecyclerView recyclerView;
     private List<ProjectDecBean.DataBean.DatasBean> data = new ArrayList<>();
-    private String URL="https://www.wanandroid.com/project/list/1/json";
+    private String URL="https://www.wanandroid.com/project/list/";
+//    private String URL="https://www.wanandroid.com/project/list/1/json?cid=294";
     private List<String> mtitle = new ArrayList<>();
     private List<Fragment> mFragments = new ArrayList<>();
     private int chapterId;
+    private int page = 1;
     private String title;
 //private List<ProjectNameBean.DataBean> projectlist = new ArrayList<>();
 
@@ -62,9 +74,7 @@ public class SimpleCardFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static SimpleCardFragment newInstance(int chapterId) {
         SimpleCardFragment fragment = new SimpleCardFragment();
-//        fragment.chapterId = chapterId;
         fragment.chapterId = chapterId;
-//        fragment.projectlist = projectlist;
         return fragment;
     }
 
@@ -80,15 +90,43 @@ public class SimpleCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_simple_card, container, false);
-        recyclerView = v.findViewById(R.id.recyclerView_project);
-        ProjectDec();
+         view = inflater.inflate(R.layout.fragment_simple_card, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView_project);
+        refresh();
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-        ProjectListAdapter projectListAdapter = new ProjectListAdapter(getActivity(),data);
+         projectListAdapter = new ProjectListAdapter(getActivity(),data);
         recyclerView.setAdapter(projectListAdapter);
-        return v;
+        ProjectDec();
+        return view;
+    }
+    private void refresh(){
+        refreshLayouts = view.findViewById(R.id.project_smartrefresh);
+        refreshLayouts.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                page = 1;
+                data.clear();
+                ProjectDec();
+                refreshLayout.finishRefresh(2000);
+                refreshLayout.finishRefresh(true);
+
+            }
+        });
+        refreshLayouts.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                page++;
+                ProjectDec();
+                refreshLayout.finishLoadMore(2000);
+                refreshLayout.finishLoadMore(true);
+
+            }
+        });
+
+
+
     }
 
     private void ProjectDec() {
@@ -97,19 +135,17 @@ public class SimpleCardFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProjectDecService projectDecService = retrofit.create(ProjectDecService.class);
-        Call<ProjectDecBean> call = projectDecService.getUrl(URL,chapterId);
+        Call<ProjectDecBean> call = projectDecService.getUrl(URL+page+"/json",chapterId);
         Log.e("TAG", "ProjectDec哈哈哈: "+chapterId );
+        Log.e("TAG", "heiehieh嘿嘿哈哈哈: "+URL+page+"/json?cid=294");
         call.enqueue(new Callback<ProjectDecBean>() {
             @Override
             public void onResponse(Call<ProjectDecBean> call, Response<ProjectDecBean> response) {
-                if (response != null){
+
+                if (response != null ){
                     ProjectDecBean projectDecBean = response.body();
                     data.addAll(projectDecBean.getData().getDatas());
-
-//                    for (int i=0;i<data.size();i++){
-//                        mprojectid.add(data.get(i).getChapterId());
-//                    }
-
+                    projectListAdapter.notifyDataSetChanged();
                     Log.e("TAG", "onResponse: "+response );
                 }
             }

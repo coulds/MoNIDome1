@@ -72,14 +72,13 @@ public class coffe_Fragment extends Fragment  {
 
     private ArrayList<String> images=new ArrayList<>();
     private ArrayList<String> title=new ArrayList<>();
-//    private List<Bean.DataBean> arrayList = new ArrayList<>();
     private List<HomeBean.DataBean.DatasBean> arrayList = new ArrayList<>();
     private List<BannerBean.DataBean> BannerList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-//    private String ur = "https://www.wanandroid.com/article/top/json";
-    private String ur = "https://www.wanandroid.com/article/list/0/json";
+    private String ur = "https://www.wanandroid.com/article/list/";
     private String url = "https://www.wanandroid.com/banner/json";
+    private int page=0;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -131,8 +130,9 @@ public class coffe_Fragment extends Fragment  {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initDate();
         initRecyclerView();
-        NetWork();
         BannerNetWork();
+        NetWork();
+
         initDateBanner();
         initToolbar();
         return coffe_Layout;
@@ -195,24 +195,7 @@ public class coffe_Fragment extends Fragment  {
 
     }
 
-    //        recyclerView.addOnScrollListener(new LoadMoreScrollListener(manager) {
-//            @Override
-//            public void onLoadMore() {
-//                recyclerView.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        arrayList.clear();
-//                        NetWork();
-//                        recyclerViewAdapter.notifyDataSetChanged();
-//                        swipeRefreshLayout.setRefreshing(false);
-//                    }
-//                },1000);
-//            }
-//        });
     private void initDate() {
-
-
-
         RefreshLayout refreshLayout = (RefreshLayout)coffe_Layout.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()));
         refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
@@ -230,7 +213,8 @@ public class coffe_Fragment extends Fragment  {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout1) {
-                recyclerViewAdapter.refrshmore(arrayList,1);
+                page++;
+                NetWork();
                 refreshlayout1.finishLoadMore(30000/*,false*/);//传入false表示刷新失败
                 refreshlayout1.finishLoadMore(true);
             }
@@ -246,13 +230,15 @@ public class coffe_Fragment extends Fragment  {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TabService tabService = retrofit.create(TabService.class);
-        Call<HomeBean> call = tabService.getUrl(ur);
+        Call<HomeBean> call = tabService.getUrl(ur+page+"/json");
+        Log.e("TAG", "heiehieh嘿嘿哈哈哈: "+ur+page+"/json");
         call.enqueue(new Callback<HomeBean>() {
             @Override
             public void onResponse(Call<HomeBean> call, Response<HomeBean> response) {
                 HomeBean homebean = response.body();
                 arrayList.addAll(homebean.getData().getDatas());
-                recyclerViewAdapter.refrsh(arrayList);
+                recyclerViewAdapter.notifyDataSetChanged();
+//                recyclerViewAdapter.refrsh(arrayList);
 
             }
 
@@ -287,6 +273,7 @@ public class coffe_Fragment extends Fragment  {
                 banner.setImages(images);
                 banner.setBannerTitles(title);
                 banner.start();
+                recyclerViewAdapter.notifyDataSetChanged();
 
             }
 

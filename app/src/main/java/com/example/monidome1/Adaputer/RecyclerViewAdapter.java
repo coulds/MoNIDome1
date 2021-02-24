@@ -90,9 +90,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.mQuestionView.setText(data.get(position).getSuperChapterName());
         }
 
-
-
-//        Picasso.with(context).load(data.get(position).getPic()).into(holder.mCollectView);
     }
 
 
@@ -108,11 +105,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     public void refrshmore(List<HomeBean.DataBean.DatasBean> list,int page){
 //        data.clear();
-        int i=0;
-        for (i=0;i<=list.size();i++){
+        for ( int i=0;i<=list.size();i++){
             this.data.addAll(i,list);
             notifyDataSetChanged();
         }
+        page++;
 
     }
 

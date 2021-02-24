@@ -147,35 +147,6 @@ public class yinliaoFragment extends Fragment {
 
 
 
-//    private void ProjectDec() {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(WanAdroidUrl.Base_url)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        ProjectDecService projectDecService = retrofit.create(ProjectDecService.class);
-//        Call<ProjectDecBean> call = projectDecService.getUrl(URL);
-//        call.enqueue(new Callback<ProjectDecBean>() {
-//            @Override
-//            public void onResponse(Call<ProjectDecBean> call, Response<ProjectDecBean> response) {
-//                if (response != null){
-//                    ProjectDecBean projectDecBean = response.body();
-//                   projectID.addAll(projectDecBean.getData().getDatas());
-//
-////
-//
-//                    Log.e("TAG", "onResponse: "+response );
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ProjectDecBean> call, Throwable t) {
-//
-//            }
-//        });
-//
-//    }
-
-
 
     private void NetAPI() {
         Retrofit retrofit1= new Retrofit.Builder().
