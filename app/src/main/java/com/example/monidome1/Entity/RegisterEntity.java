@@ -1,8 +1,14 @@
 package com.example.monidome1.Entity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-public class RegisterEntity {
+public class RegisterEntity implements Serializable {
 
     /**
      * data : {"chapterTops":[],"collectIds":[],"email":"","icon":"","id":16599,"password":"","token":"","type":0,"username":""}

@@ -44,20 +44,13 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.login_activity);
+        init();
         setShowStatusBar(true);
     }
 
-    @Override
-    protected int initLayout() {
-        return R.layout.login_activity;
-    }
+    private void init() {
 
-    @Override
-    protected void initData() {
-    }
-
-    @Override
-    protected void initView() {
         editText_phone = (EditText) findViewById(R.id.editTextPhone);
         editText_password = (EditText) findViewById(R.id.editTextPhone);
         register_text = (TextView) findViewById(R.id.register);
@@ -69,7 +62,6 @@ public class LoginActivity extends BaseActivity {
 
                 String username = editText_phone.getText().toString();
                 String password = editText_password.getText().toString();
-
                 login(username,password);
             }
 
@@ -84,8 +76,47 @@ public class LoginActivity extends BaseActivity {
         });
 
 
-
     }
+
+//    @Override
+//    protected int initLayout() {
+//        return R.layout.login_activity;
+//    }
+//
+//    @Override
+//    protected void initData() {
+//    }
+
+//    @Override
+//    protected void initView() {
+//        editText_phone = (EditText) findViewById(R.id.editTextPhone);
+//        editText_password = (EditText) findViewById(R.id.editTextPhone);
+//        register_text = (TextView) findViewById(R.id.register);
+//        button_login = (Button)findViewById(R.id.login_button);
+//
+//        button_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                String username = editText_phone.getText().toString();
+//                String password = editText_password.getText().toString();
+//
+//                login(username,password);
+//            }
+//
+//
+//        });
+//        register_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                navigateTo(RegisterActivity.class);
+//            }
+//        });
+//
+//
+//
+//    }
 
 //    @Override
 //    protected void initData() {

@@ -52,11 +52,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
 
-        setContentView(initLayout());
+//        setContentView(initLayout());
         //初始化控件
-        initView();
-        //设置数据
-        initData();
+//        initView();
+//        //设置数据
+//        initData();
 
 
     }
@@ -64,19 +64,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 设置数据
      */
-    protected abstract int initLayout();
-
-    /**
-     * 初始化布局
-     *
-     * @return 布局id
-     */
-    protected abstract void initData();
-
-    /**
-     * 初始化控件
-     */
-    protected abstract void initView();
+//    protected abstract int initLayout();
+//
+//    /**
+//     * 初始化布局
+//     *
+//     * @return 布局id
+//     */
+//    protected abstract void initData();
+//
+//    /**
+//     * 初始化控件
+//     */
+//    protected abstract void initView();
 
 
 

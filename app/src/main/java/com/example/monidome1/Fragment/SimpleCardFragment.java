@@ -141,7 +141,7 @@ public class SimpleCardFragment extends Fragment {
         call.enqueue(new Callback<ProjectDecBean>() {
             @Override
             public void onResponse(Call<ProjectDecBean> call, Response<ProjectDecBean> response) {
-
+                //一定要耍刷新才能 实现累计添加更多页面
                 if (response != null ){
                     ProjectDecBean projectDecBean = response.body();
                     data.addAll(projectDecBean.getData().getDatas());
