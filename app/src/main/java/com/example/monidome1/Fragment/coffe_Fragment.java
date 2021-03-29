@@ -18,10 +18,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.monidome1.Adaputer.HomeTopAdapter;
 import com.example.monidome1.Banner.LocalImageLoader;
 import com.example.monidome1.Bean.BannerBean;
 import com.example.monidome1.Bean.HomeBean;
+import com.example.monidome1.Bean.HomeTopBean;
 import com.example.monidome1.Interface.BannerService;
+import com.example.monidome1.Interface.HomeTopService;
 import com.example.monidome1.Interface.TabService;
 import com.example.monidome1.RetrofitUrl.WanAdroidUrl;
 import com.example.monidome1.RetrofitUrl.Contant;
@@ -73,11 +76,14 @@ public class coffe_Fragment extends Fragment  {
     private ArrayList<String> images=new ArrayList<>();
     private ArrayList<String> title=new ArrayList<>();
     private List<HomeBean.DataBean.DatasBean> arrayList = new ArrayList<>();
+    private List<HomeTopBean.DataBean> toparrlist = new ArrayList<>();
     private List<BannerBean.DataBean> BannerList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
+    private HomeTopAdapter homeTopAdapter;
     private String ur = "https://www.wanandroid.com/article/list/";
     private String url = "https://www.wanandroid.com/banner/json";
+    private String topurl = "https://www.wanandroid.com/article/top/json";
     private int page=0;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -130,9 +136,9 @@ public class coffe_Fragment extends Fragment  {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initDate();
         initRecyclerView();
+        TopNetWork();
         BannerNetWork();
         NetWork();
-
         initDateBanner();
         initToolbar();
         return coffe_Layout;
@@ -185,8 +191,13 @@ public class coffe_Fragment extends Fragment  {
         LinearLayoutManager manager = new LinearLayoutManager(this.getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
+
         recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), arrayList);
+         homeTopAdapter = new HomeTopAdapter(getActivity(), toparrlist);
 //        mPullLoadMoreRecyclerView.setAdapter(recyclerViewAdapter);
+
+
+        recyclerView.setAdapter(homeTopAdapter);
         recyclerView.setAdapter(recyclerViewAdapter);
 
 
@@ -219,7 +230,28 @@ public class coffe_Fragment extends Fragment  {
                 refreshlayout1.finishLoadMore(true);
             }
         });
+    }
 
+    private void TopNetWork(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Contant.Base_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        HomeTopService homeTopService = retrofit.create(HomeTopService.class);
+        Call<HomeTopBean> calltop = homeTopService.getUrl(topurl);
+        calltop.enqueue(new Callback<HomeTopBean>() {
+            @Override
+            public void onResponse(Call<HomeTopBean> call, Response<HomeTopBean> response) {
+                HomeTopBean homeTopBean = response.body();
+               toparrlist.addAll(homeTopBean.getData());
+               homeTopAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<HomeTopBean> call, Throwable t) {
+
+            }
+        });
 
 
 
@@ -231,7 +263,7 @@ public class coffe_Fragment extends Fragment  {
                 .build();
         TabService tabService = retrofit.create(TabService.class);
         Call<HomeBean> call = tabService.getUrl(ur+page+"/json");
-        Log.e("TAG", "heiehieh嘿嘿哈哈哈: "+ur+page+"/json");
+//        Log.e("TAG", "heiehieh嘿嘿哈哈哈: "+ur+page+"/json");
         call.enqueue(new Callback<HomeBean>() {
             @Override
             public void onResponse(Call<HomeBean> call, Response<HomeBean> response) {
@@ -239,7 +271,6 @@ public class coffe_Fragment extends Fragment  {
                 arrayList.addAll(homebean.getData().getDatas());
                 recyclerViewAdapter.notifyDataSetChanged();
 //                recyclerViewAdapter.refrsh(arrayList);
-
             }
 
             @Override
@@ -248,6 +279,7 @@ public class coffe_Fragment extends Fragment  {
                 Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 

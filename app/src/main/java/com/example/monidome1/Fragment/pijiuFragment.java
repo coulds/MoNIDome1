@@ -1,22 +1,33 @@
 package com.example.monidome1.Fragment;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.monidome1.Activity.MyAppcation;
+import com.example.monidome1.Adaputer.HomeAdapter;
 import com.example.monidome1.Adaputer.PictureAdapter;
 import com.example.monidome1.Bean.PictureBean;
+import com.example.monidome1.Bean.ProjectDecBean;
+import com.example.monidome1.Bean.ProjectNameBean;
+import com.example.monidome1.Bean.PublicAccountBean;
 import com.example.monidome1.Interface.PictureService;
+import com.example.monidome1.Interface.PublicAccountService;
 import com.example.monidome1.R;
 import com.example.monidome1.RetrofitUrl.PictureUrl;
+import com.example.monidome1.RetrofitUrl.WanAdroidUrl;
+import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +44,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * create an instance of this fragment.
  */
 public class pijiuFragment extends Fragment {
-    private PictureAdapter pictureAdapter;
+
+    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPager mViewPager;
+    private Context context;
+    private View yinliao_Layout;
+    private List<PublicAccountBean.DataBean> accountlist = new ArrayList<>();
+    private List<ProjectDecBean.DataBean.DatasBean> projectID = new ArrayList<>();
+    private List<String> mtitle = new ArrayList<>();
+    private List<Fragment> mFragments = new ArrayList<>();
+    private String url="https://wanandroid.com/wxarticle/chapters/json";
+
+
+//    private PictureAdapter pictureAdapter;
     private View pijiu_Layout;
-    private RecyclerView picrecycleview;
-    private List<PictureBean.DataBean> picturelist = new ArrayList<>();
-    private String url ="http://wallpaper.apc.360.cn/index.php?c=WallPaperAndroid&a=getAppsByCategory&cid=1&start=0&count=99";
+//    private RecyclerView picrecycleview;
+//    private List<PictureBean.DataBean> picturelist = new ArrayList<>();
+//    private String url ="http://wallpaper.apc.360.cn/index.php?c=WallPaperAndroid&a=getAppsByCategory&cid=1&start=0&count=99";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,19 +107,30 @@ public class pijiuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         pijiu_Layout = inflater.inflate(R.layout.fragment_pijiu, container, false);
+        mSlidingTabLayout = pijiu_Layout.findViewById(R.id.SlidingTabLayout_pijiu);
+        mViewPager = pijiu_Layout.findViewById(R.id.ViewPager_viewpage_pijiu);
         NetAPI();
-        InitRecycleview();
+        changeStatusBarTextColor(true);
         return pijiu_Layout;
     }
 
-    private void InitRecycleview() {
-        picrecycleview = (RecyclerView) pijiu_Layout.findViewById(R.id.pictureRecycleview);
+    private void changeStatusBarTextColor(boolean isBlack) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (isBlack) {
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+            } else {
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+            }
+        }
+    }
 
-        GridLayoutManager manager = new GridLayoutManager(getActivity(),2);
-        manager.setOrientation(GridLayoutManager.VERTICAL);
-        picrecycleview.setLayoutManager(manager);
-        pictureAdapter = new PictureAdapter(getActivity(),picturelist);
-        picrecycleview.setAdapter(pictureAdapter);
+    private void InitRecycleview() {
+//        picrecycleview = (RecyclerView) pijiu_Layout.findViewById(R.id.pictureRecycleview);
+//        GridLayoutManager manager = new GridLayoutManager(getActivity(),2);
+//        manager.setOrientation(GridLayoutManager.VERTICAL);
+//        picrecycleview.setLayoutManager(manager);
+//        pictureAdapter = new PictureAdapter(getActivity(),picturelist);
+//        picrecycleview.setAdapter(pictureAdapter);
 
 //        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
 //        manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -106,24 +140,45 @@ public class pijiuFragment extends Fragment {
 
     private void NetAPI() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PictureUrl.Picture_URL)
+                .baseUrl(WanAdroidUrl.Base_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        PictureService pictureService = retrofit.create(PictureService.class);
-        Call<PictureBean> call = pictureService.getURL(url);
-        call.enqueue(new Callback<PictureBean>() {
+        PublicAccountService publicAccountService = retrofit.create(PublicAccountService.class);
+        Call<PublicAccountBean> call = publicAccountService.geturl(url);
+        call.enqueue(new Callback<PublicAccountBean>() {
             @Override
-            public void onResponse(Call<PictureBean> call, Response<PictureBean> response) {
-                PictureBean pictureBean = response.body();
-                picturelist.addAll(pictureBean.getData());
-                pictureAdapter.refrest(picturelist);
+            public void onResponse(Call<PublicAccountBean> call, Response<PublicAccountBean> response) {
+//                PublicAccountBean publicAccountBean = response.body();
+//                accountlist.addAll(publicAccountBean.getData());
+
+                if (response == null){
+                    Toast.makeText(context,"respose为空",Toast.LENGTH_SHORT).show();
+                }else {
+                    PublicAccountBean publicAccountBean = response.body();
+                    accountlist.addAll(publicAccountBean.getData());
+                    Log.e("TAG", "onResponse: "+mtitle );
+
+                    for (int i=0;i<accountlist.size();i++){
+                        mtitle.add(accountlist.get(i).getName());
+                        mFragments.add(PublicAccountFragment.newInstance(accountlist.get(i).getId()));
+                        Log.e("哈哈哈就的哈就好", "返回: "+accountlist.get(i).getId());
+                    }
+                    mViewPager.setAdapter(new HomeAdapter(getFragmentManager()
+                            ,mtitle,mFragments));
+                    mSlidingTabLayout.setViewPager(mViewPager);
+
+                }
+
+                Log.e("TAG", "请求成功" );
+
             }
 
             @Override
-            public void onFailure(Call<PictureBean> call, Throwable t) {
-                Toast.makeText(MyAppcation.getContext(),"看看数据一下："+t,Toast.LENGTH_SHORT).show();
-
+            public void onFailure(Call<PublicAccountBean> call, Throwable t) {
+                Log.e("TAG", "请求失败" );
             }
         });
+
+
     }
 }

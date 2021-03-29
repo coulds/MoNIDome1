@@ -11,19 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.monidome1.Adaputer.HomeAdapter;
 import com.example.monidome1.Adaputer.ProjectListAdapter;
+import com.example.monidome1.Adaputer.PublicAccountAdapter;
+import com.example.monidome1.Bean.PADecBean;
 import com.example.monidome1.Bean.ProjectDecBean;
+import com.example.monidome1.Interface.PADecService;
 import com.example.monidome1.Interface.ProjectDecService;
 import com.example.monidome1.R;
 import com.example.monidome1.RetrofitUrl.WanAdroidUrl;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,23 +35,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SimpleCardFragment#newInstance} factory method to
+ * Use the {@link PublicAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SimpleCardFragment extends Fragment {
+public class PublicAccountFragment extends Fragment {
 
-    private ProjectListAdapter projectListAdapter;
+
+    private PublicAccountAdapter publicAccountAdapter;
     private View view;
     private RefreshLayout refreshLayouts;
     private RecyclerView recyclerView;
-    private List<ProjectDecBean.DataBean.DatasBean> data = new ArrayList<>();
-    private String URL="https://www.wanandroid.com/project/list/";
+    private List<PADecBean.DataBean.DatasBean> data = new ArrayList<>();
+    private String URL="https://wanandroid.com/wxarticle/list/";
     private List<String> mtitle = new ArrayList<>();
     private List<Fragment> mFragments = new ArrayList<>();
     private int chapterId;
     private int page = 1;
-//private List<ProjectNameBean.DataBean> projectlist = new ArrayList<>();
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,15 +61,31 @@ public class SimpleCardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SimpleCardFragment() {
+    public PublicAccountFragment() {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
-    public static SimpleCardFragment newInstance(int chapterId) {
-        SimpleCardFragment fragment = new SimpleCardFragment();
+    public static PublicAccountFragment newInstance(int chapterId) {
+        PublicAccountFragment fragment = new PublicAccountFragment();
         fragment.chapterId = chapterId;
+        return fragment;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PublicAccountFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PublicAccountFragment newInstance(String param1, String param2) {
+        PublicAccountFragment fragment = new PublicAccountFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -87,25 +101,60 @@ public class SimpleCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_simple_card, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView_project);
+        // Inflate the layout for this fragment
+
+        view = inflater.inflate(R.layout.fragment_public_account, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView_public);
         refresh();
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-         projectListAdapter = new ProjectListAdapter(getActivity(),data);
-        recyclerView.setAdapter(projectListAdapter);
-        ProjectDec();
+        publicAccountAdapter = new PublicAccountAdapter(getActivity(),data);
+        recyclerView.setAdapter(publicAccountAdapter);
+        PublicACCountDec();
         return view;
+
     }
-    private void refresh(){
-        refreshLayouts = view.findViewById(R.id.project_smartrefresh);
+
+    private void PublicACCountDec() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WanAdroidUrl.Base_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        PADecService paDecService = retrofit.create(PADecService.class);
+        Call<PADecBean> call = paDecService.getUrl(URL+chapterId+"/"+page+"/json");
+        Log.e("TAG", "ACCOUNTDec哈哈哈: "+chapterId );
+        Log.e("TAG", "ACCOUNT嘿嘿哈哈哈: "+URL+chapterId+"/"+page+"/json");
+        call.enqueue(new Callback<PADecBean>() {
+            @Override
+            public void onResponse(Call<PADecBean> call, Response<PADecBean> response) {
+                if (response != null ){
+                    PADecBean paDecBean = response.body();
+                    data.addAll(paDecBean.getData().getDatas());
+
+                    publicAccountAdapter.notifyDataSetChanged();
+                    Log.e("TAG", "onResponse: "+response );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PADecBean> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    private void refresh() {
+
+        refreshLayouts = view.findViewById(R.id.account_smartrefresh);
         refreshLayouts.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 page = 1;
                 data.clear();
-                ProjectDec();
+                PublicACCountDec();
                 refreshLayout.finishRefresh(2000);
                 refreshLayout.finishRefresh(true);
 
@@ -115,40 +164,9 @@ public class SimpleCardFragment extends Fragment {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 page++;
-                ProjectDec();
+                PublicACCountDec();
                 refreshLayout.finishLoadMore(2000);
                 refreshLayout.finishLoadMore(true);
-
-            }
-        });
-
-
-
-    }
-
-    private void ProjectDec() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WanAdroidUrl.Base_url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ProjectDecService projectDecService = retrofit.create(ProjectDecService.class);
-        Call<ProjectDecBean> call = projectDecService.getUrl(URL+page+"/json",chapterId);
-        Log.e("TAG", "ProjectDec哈哈哈: "+chapterId );
-        Log.e("TAG", "heiehieh嘿嘿哈哈哈: "+URL+page+"/json?cid=294");
-        call.enqueue(new Callback<ProjectDecBean>() {
-            @Override
-            public void onResponse(Call<ProjectDecBean> call, Response<ProjectDecBean> response) {
-                //一定要耍刷新才能 实现累计添加更多页面
-                if (response != null ){
-                    ProjectDecBean projectDecBean = response.body();
-                    data.addAll(projectDecBean.getData().getDatas());
-                    projectListAdapter.notifyDataSetChanged();
-                    Log.e("TAG", "onResponse: "+response );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProjectDecBean> call, Throwable t) {
 
             }
         });

@@ -44,6 +44,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         if (data != null){
+
+            // 个人 探索时间 不用管
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date date = new Date(System.currentTimeMillis());
             String nowdata = simpleDateFormat.format(date);
@@ -71,7 +73,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Log.d("哈哈哈哈哈1", "Data的时间 "+date);
             Log.d("哈哈哈哈哈2", "nowdata "+nowdata);
 
-            holder.mArticleAuthor.setText("作者："+data.get(position).getAuthor());
+            for (int i=0;i<data.size();i++){
+                if (data.get(position).getAuthor().equals("")){
+                    holder.mArticleAuthor.setText("作者："+data.get(position).getShareUser());
+                }else {
+                    holder.mArticleAuthor.setText("作者："+data.get(position).getAuthor());
+                }
+            }
+
             holder.mArticleContent.setText(data.get(position).getTitle());
             holder.mArticleType.setText("分类："+data.get(position).getChapterName()+"/"+data.get(position).getSuperChapterName());
             holder.mArticleDate.setText(data.get(position).getNiceDate());

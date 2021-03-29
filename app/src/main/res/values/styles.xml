@@ -6,7 +6,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-
     </style>
 
 
@@ -22,7 +21,8 @@
         <item name="android:background">@drawable/tongyongbutton</item>
         <item name="android:foreground">@null</item>
 
-
     </style>
+
+
 
 </resources>

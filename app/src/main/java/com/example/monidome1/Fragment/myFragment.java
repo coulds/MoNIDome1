@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.monidome1.Activity.LoginActivity;
+import com.example.monidome1.Entity.LoginEntity;
 import com.example.monidome1.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +30,10 @@ public class myFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private List<LoginEntity.DataBean> logindata = new ArrayList<>();
+    private LoginEntity loginEntity;
     private View my_Layout;
+    private TextView nikename;
     private String mParam1;
     private String mParam2;
 
@@ -66,8 +73,11 @@ public class myFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-         my_Layout = inflater.inflate(R.layout.fragment_my, container, false);
+
+        my_Layout = inflater.inflate(R.layout.fragment_my, container, false);
+        nikename =(TextView) my_Layout.findViewById(R.id.me_name);
         initview();
+//        onLogin(logindata);
         return my_Layout;
     }
 
@@ -81,4 +91,15 @@ public class myFragment extends Fragment {
             }
         });
     }
+//    private void onLogin(LoginEntity loginEntity){
+//        if (loginEntity== null){
+//            if (loginEntity.getErrorCode() == 0){
+//                nikename.setText(loginEntity.getData().getUsername());
+//
+//
+//            }
+//        }
+//    }
+
+
 }

@@ -68,7 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
                 register_password = register_editText_password.getText().toString();
                 register_compassword = register_commite_password.getText().toString();
 //                registe(registe_username,register_password,register_compassword);
-                Retrofit retrofit = new Retrofit.Builder()
+                Retrofit retrofit = new Retrofit
+                        .Builder()
                         .baseUrl(WanAdroidUrl.Base_url)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -81,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                         RegisterEntity registerEntity = response.body();
                         if (registerEntity.getErrorCode() == 0){
                             data.add(registerEntity.getData());
-                            Toast.makeText(RegisterActivity.this,"注册成功：",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, registerEntity.getErrorMsg(),Toast.LENGTH_SHORT).show();
                             finish();
                         }else {
                             Toast.makeText(RegisterActivity.this,"注册失败：",Toast.LENGTH_SHORT).show();

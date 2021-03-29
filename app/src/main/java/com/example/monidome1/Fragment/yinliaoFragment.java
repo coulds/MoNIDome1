@@ -45,30 +45,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class yinliaoFragment extends Fragment {
 
-    private static int mStatusBarHeight;
-
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private Context context;
-    private RecyclerView yinliaorecyclerview;
-    private YinliaoAdapter yinliaoAdapter;
     private View yinliao_Layout;
     private List<ProjectNameBean.DataBean> projectlist = new ArrayList<>();
     private List<ProjectDecBean.DataBean.DatasBean> projectID = new ArrayList<>();
-
     private List<String> mtitle = new ArrayList<>();
     private List<Fragment> mFragments = new ArrayList<>();
-
     private String url="https://www.wanandroid.com/project/tree/json";
-    private String URL="https://www.wanandroid.com/project/list/1/json";
 
 
 
 
-    private final String[] mTitles = {
-            "热门", "iOS", "Android"
-            , "前端", "后端", "设计", "工具资源"
-    };
+
+
 
 
 
@@ -116,17 +107,11 @@ public class yinliaoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         yinliao_Layout = inflater.inflate(R.layout.fragment_yinliao, container, false);
+        yinliao_Layout = inflater.inflate(R.layout.fragment_yinliao, container, false);
         mSlidingTabLayout = yinliao_Layout.findViewById(R.id.SlidingTabLayout_yinliao);
         mViewPager = yinliao_Layout.findViewById(R.id.ViewPager_viewpage);
-
-//        InitRecyclerView();
         NetAPI();
         changeStatusBarTextColor(true);
-        
-//        ProjectDec();
-
-
         return yinliao_Layout;
 
     }
