@@ -1,6 +1,9 @@
 package com.example.monidome1.Adaputer;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.monidome1.Activity.WebViewActivity;
 import com.example.monidome1.Bean.HomeBean;
+import com.example.monidome1.Bean.HomeTopBean;
 import com.example.monidome1.R;
+import com.example.monidome1.util.JumpWebUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<HomeBean.DataBean.DatasBean> data = new ArrayList<>();
 
 
-    public RecyclerViewAdapter(Context context, List<HomeBean.DataBean.DatasBean> data) {
+    public RecyclerViewAdapter(Context context,List<HomeBean.DataBean.DatasBean> data) {
         this.context = context;
         this.data = data;
 
@@ -44,7 +50,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         if (data != null){
-
             // 个人 探索时间 不用管
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date date = new Date(System.currentTimeMillis());
@@ -80,21 +85,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     holder.mArticleAuthor.setText("作者："+data.get(position).getAuthor());
                 }
             }
+            holder.itemView.setOnClickListener(View -> JumpWebUtils.startWebView(context,
+                    data.get(position).getTitle(),
+                    data.get(position).getLink()));
+
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.get(position).getLink()));
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("key",data.get(position).getLink());
+//                    intent.putExtra(data,bundle)
+////                    intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+//
+//                }
+//            });
 
             holder.mArticleContent.setText(data.get(position).getTitle());
             holder.mArticleType.setText("分类："+data.get(position).getChapterName()+"/"+data.get(position).getSuperChapterName());
             holder.mArticleDate.setText(data.get(position).getNiceDate());
-
                 if (Str.equals(data.get(position).getAuthor())||Str1.equals(data.get(position).getAuthor())) {
                     holder.mTopView.setVisibility(View.VISIBLE);
                 }else {
                     holder.mTopView.setVisibility(View.GONE);
                 }
-
             if (Str.equals(data.get(position).getAuthor())||Str1.equals(data.get(position).getAuthor())) {
                 holder.mNewView.setVisibility(View.VISIBLE);
             }
-
             holder.mQuestionView.setVisibility(View.VISIBLE);
             holder.mQuestionView.setText(data.get(position).getSuperChapterName());
         }
@@ -105,6 +122,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return data.size();
+
 
     }
     public void refrsh(List<HomeBean.DataBean.DatasBean> list){
@@ -123,8 +141,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
-
-
         TextView mArticleAuthor;
         TextView mArticleContent;
         TextView mArticleType;
@@ -138,7 +154,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
-
 
             mCollectView = itemView.findViewById(R.id.item_list_collect);
             mArticleAuthor = itemView.findViewById(R.id.item_home_author);

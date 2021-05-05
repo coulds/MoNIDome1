@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.monidome1.Bean.HomeBean;
 import com.example.monidome1.Bean.HomeTopBean;
 import com.example.monidome1.R;
+import com.example.monidome1.util.JumpWebUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,10 @@ public class HomeTopAdapter extends RecyclerView.Adapter<HomeTopAdapter.MyHolder
                 holder.mArticleAuthor.setText("作者："+data.get(position).getAuthor());
             }
         }
+
+        holder.itemView.setOnClickListener(view -> JumpWebUtils.startWebView(context,
+                data.get(position).getTitle(),
+                data.get(position).getLink()));
         holder.mArticleContent.setText(data.get(position).getTitle());
 
         holder.mTopView.setVisibility(View.VISIBLE);

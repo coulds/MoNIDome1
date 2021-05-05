@@ -78,7 +78,7 @@ public class coffe_Fragment extends Fragment  {
     private List<HomeBean.DataBean.DatasBean> arrayList = new ArrayList<>();
     private List<HomeTopBean.DataBean> toparrlist = new ArrayList<>();
     private List<BannerBean.DataBean> BannerList = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,toprecycleview;
     private RecyclerViewAdapter recyclerViewAdapter;
     private HomeTopAdapter homeTopAdapter;
     private String ur = "https://www.wanandroid.com/article/list/";
@@ -135,6 +135,7 @@ public class coffe_Fragment extends Fragment  {
 
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initDate();
+        inittopRecycleview();
         initRecyclerView();
         TopNetWork();
         BannerNetWork();
@@ -184,6 +185,18 @@ public class coffe_Fragment extends Fragment  {
             }
         });
     }
+    private void inittopRecycleview(){
+        toprecycleview = (RecyclerView) coffe_Layout.findViewById(R.id.toprecyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this.getActivity());
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        toprecycleview.setLayoutManager(manager);
+       homeTopAdapter = new HomeTopAdapter(getActivity(),toparrlist);
+//         homeTopAdapter = new HomeTopAdapter(getActivity(), toparrlist);
+//        mPullLoadMoreRecyclerView.setAdapter(recyclerViewAdapter);
+//        recyclerView.setAdapter(homeTopAdapter);
+        toprecycleview.setAdapter(homeTopAdapter);
+
+    }
 
     private void initRecyclerView() {
 
@@ -191,19 +204,11 @@ public class coffe_Fragment extends Fragment  {
         LinearLayoutManager manager = new LinearLayoutManager(this.getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-
-        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), arrayList);
-         homeTopAdapter = new HomeTopAdapter(getActivity(), toparrlist);
+        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(),arrayList);
+//         homeTopAdapter = new HomeTopAdapter(getActivity(), toparrlist);
 //        mPullLoadMoreRecyclerView.setAdapter(recyclerViewAdapter);
-
-
-        recyclerView.setAdapter(homeTopAdapter);
+//        recyclerView.setAdapter(homeTopAdapter);
         recyclerView.setAdapter(recyclerViewAdapter);
-
-
-
-
-
     }
 
     private void initDate() {
@@ -244,6 +249,7 @@ public class coffe_Fragment extends Fragment  {
             public void onResponse(Call<HomeTopBean> call, Response<HomeTopBean> response) {
                 HomeTopBean homeTopBean = response.body();
                toparrlist.addAll(homeTopBean.getData());
+//                recyclerViewAdapter.notifyDataSetChanged();
                homeTopAdapter.notifyDataSetChanged();
             }
 
