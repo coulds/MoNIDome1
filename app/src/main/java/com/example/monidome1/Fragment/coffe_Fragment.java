@@ -32,6 +32,7 @@ import com.example.monidome1.RetrofitUrl.Contant;
 import com.example.monidome1.Activity.MyAppcation;
 import com.example.monidome1.R;
 import com.example.monidome1.Adaputer.RecyclerViewAdapter;
+import com.example.monidome1.util.JumpWebUtils;
 import com.example.monidome1.util.StringUtil;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
@@ -146,7 +147,10 @@ public class coffe_Fragment extends Fragment  {
     }
 
 
-
+    /**
+     * 首页下滑弹出的toolbar
+     *
+     */
 
     private void initToolbar() {
         mNestedScrollView = coffe_Layout.findViewById(R.id.nest_scroll);
@@ -181,7 +185,11 @@ public class coffe_Fragment extends Fragment  {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-                Toast.makeText(getContext(),"你点击了"+position+"行",Toast.LENGTH_SHORT);
+                JumpWebUtils.startWebView(context,
+                        BannerList.get(position).getTitle(),
+                        BannerList.get(position).getUrl()
+                        );
+//                Toast.makeText(getActivity(),"你点击了"+position+"行",Toast.LENGTH_SHORT).show();
             }
         });
     }

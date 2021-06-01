@@ -85,21 +85,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     holder.mArticleAuthor.setText("作者："+data.get(position).getAuthor());
                 }
             }
+
             holder.itemView.setOnClickListener(View -> JumpWebUtils.startWebView(context,
                     data.get(position).getTitle(),
                     data.get(position).getLink()));
 
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.get(position).getLink()));
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("key",data.get(position).getLink());
-//                    intent.putExtra(data,bundle)
-////                    intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
-//
-//                }
-//            });
 
             holder.mArticleContent.setText(data.get(position).getTitle());
             holder.mArticleType.setText("分类："+data.get(position).getChapterName()+"/"+data.get(position).getSuperChapterName());

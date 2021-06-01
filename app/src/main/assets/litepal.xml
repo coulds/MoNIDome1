@@ -8,7 +8,6 @@
     <list>
         <mapping class="com.example.monidome1.Bean.TestBeanLitepal"></mapping>
         <mapping class="com.example.monidome1.Bean.Bean"></mapping>
-
     </list>
 
 </litepal>

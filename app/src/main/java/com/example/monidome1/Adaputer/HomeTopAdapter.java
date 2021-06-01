@@ -51,6 +51,8 @@ public class HomeTopAdapter extends RecyclerView.Adapter<HomeTopAdapter.MyHolder
                 data.get(position).getLink()));
         holder.mArticleContent.setText(data.get(position).getTitle());
 
+
+
         holder.mTopView.setVisibility(View.VISIBLE);
         holder.mNewView.setVisibility(View.VISIBLE);
         holder.mQuestionView.setVisibility(View.VISIBLE);

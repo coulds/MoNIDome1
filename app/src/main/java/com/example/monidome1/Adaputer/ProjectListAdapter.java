@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.monidome1.Bean.ProjectDecBean;
 import com.example.monidome1.R;
+import com.example.monidome1.util.JumpWebUtils;
 
 import java.util.List;
 
@@ -44,15 +45,9 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         Glide.with(mcontext).load(mdata.get(position).getEnvelopePic()).into(holder.mProjectImageView);
         holder.mProjectType.setText("分类："+mdata.get(position).getChapterName()+"/"+mdata.get(position).getSuperChapterName());
         //recyclerview的点击事件
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Toast.makeText(mcontext,"you click me to "+position,Toast.LENGTH_SHORT).show();
-            }
-        });
-//        holder.mProjectDate.setText(mdata.get(position).getNiceDate());
+        holder.itemView.setOnClickListener(View -> JumpWebUtils.startWebView(mcontext,
+                mdata.get(position).getTitle(),
+                mdata.get(position).getLink()));
 
 
     }
